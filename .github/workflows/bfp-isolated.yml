@@ -1,0 +1,45 @@
+name: BFP isolated verification f17a42af0d39
+'on':
+  push:
+    branches:
+    - bfp-isolated-f17a42af0d39
+permissions: {}
+jobs:
+  buggy:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include:
+        - merged: true
+        - merged: false
+    steps:
+    - name: Evaluate original condition against fixture
+      env:
+        OBSERVED: ${{ matrix.merged == 'true' }}
+        EXPECTED: ${{ matrix.merged }}
+      run: 'printf "observed=%s expected=%s
+
+        " "$OBSERVED" "$EXPECTED"
+
+        test "$OBSERVED" = "$EXPECTED"'
+  human:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        include:
+        - merged: true
+        - merged: false
+    steps:
+    - name: Evaluate original condition against fixture
+      env:
+        OBSERVED: ${{ matrix.merged }}
+        EXPECTED: ${{ matrix.merged }}
+      run: 'printf "observed=%s expected=%s
+
+        " "$OBSERVED" "$EXPECTED"
+
+        test "$OBSERVED" = "$EXPECTED"'
